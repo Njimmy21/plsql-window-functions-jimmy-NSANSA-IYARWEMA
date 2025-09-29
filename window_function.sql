@@ -1,6 +1,5 @@
------------------------------------------------------------
--- 1. Ranking: Top N customers by revenue
------------------------------------------------------------
+1. RANK()
+       
 SELECT customer_id,
        SUM(amount) AS total_revenue,
        RANK() OVER (ORDER BY SUM(amount) DESC) AS revenue_rank
@@ -8,9 +7,8 @@ FROM transactions
 GROUP BY customer_id
 ORDER BY revenue_rank;
 
------------------------------------------------------------
--- 2. Running Totals: Cumulative sales over time
------------------------------------------------------------
+2. SUM() & OVER()
+       
 SELECT sale_date,
        SUM(amount) AS daily_sales,
        SUM(SUM(amount)) OVER (ORDER BY sale_date
@@ -19,9 +17,7 @@ FROM transactions
 GROUP BY sale_date
 ORDER BY sale_date;
 
------------------------------------------------------------
--- 3. Navigation: Month-over-month growth using LAG
------------------------------------------------------------
+3.LAG() / LEAD()
 SELECT month,
        monthly_sales,
        LAG(monthly_sales) OVER (ORDER BY month) AS prev_month_sales,
@@ -35,9 +31,8 @@ FROM (
     ORDER BY month
 );
 
------------------------------------------------------------
--- 4. Distribution: Segment customers into quartiles
------------------------------------------------------------
+4.NTILE()
+       
 SELECT customer_id,
        SUM(amount) AS total_revenue,
        NTILE(4) OVER (ORDER BY SUM(amount) DESC) AS revenue_quartile
@@ -45,9 +40,8 @@ FROM transactions
 GROUP BY customer_id
 ORDER BY revenue_quartile;
 
------------------------------------------------------------
--- 5. Moving Average: 3-month rolling sales average
------------------------------------------------------------
+5.AVG & OVER
+       
 SELECT month,
        monthly_sales,
        ROUND(AVG(monthly_sales) OVER (
